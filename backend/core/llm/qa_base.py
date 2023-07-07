@@ -5,6 +5,7 @@ from typing import AsyncIterable, Awaitable
 
 from langchain.chains import ConversationalRetrievalChain, LLMChain
 from langchain.chains.question_answering import load_qa_chain
+from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms.base import BaseLLM
 from logger import get_logger
@@ -33,6 +34,10 @@ class QABaseBrainPicking(BaseBrainPicking):
         model: str,
         brain_id: str,
         chat_id: str,
+        user_openai_api_key: str,  # pyright: ignore reportPrivateUsage=none
+        user_openai_api_base: str = None,  # pyright: ignore reportPrivateUsage=none
+        user_openai_gpt_deployment_id: str = None,  # pyright: ignore reportPrivateUsage=none
+        user_openai_embedding_deployment_id: str = None,  # pyright: ignore reportPrivateUsage=none
         streaming: bool = False,
         **kwargs,
     ) -> "QABaseBrainPicking":  # pyright: ignore reportPrivateUsage=none
@@ -44,6 +49,10 @@ class QABaseBrainPicking(BaseBrainPicking):
             model=model,
             brain_id=brain_id,
             chat_id=chat_id,
+            user_openai_api_key=user_openai_api_key,
+            user_openai_api_base=user_openai_api_base,
+            user_openai_gpt_deployment_id=user_openai_gpt_deployment_id,
+            user_openai_embedding_deployment_id=user_openai_embedding_deployment_id,
             streaming=streaming,
             **kwargs,
         )
