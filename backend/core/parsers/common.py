@@ -24,6 +24,7 @@ async def process_file(
             "file_sha1": file.file_sha1,
             "file_size": file.file_size,
             "file_name": file.file_name,
+            "file_path": "C:/users/ken/",
             "chunk_size": file.chunk_size,
             "chunk_overlap": file.chunk_overlap,
             "date": dateshort,
