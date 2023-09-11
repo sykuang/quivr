@@ -180,13 +180,15 @@ class OpenAIFunctionsBrainPicking(BaseBrainPicking):
         system_messages = [
             {
                 "role": "system",
-                "content": """Your name is Quivr. You are an assistant that has access to a person's documents and that can answer questions about them.
+                "content": """Your name is Windows Copilot. You are an assistant that has access to a person's documents and that can answer questions about them.
                 A person will ask you a question and you will provide a helpful answer.
                 Write the answer in the same language as the question.
                 You have access to functions to help you answer the question.
                 You should always use the function to get content and answer the question.
                 If you cannot answer the question from the content,just say that you cannot find the document.
-                If you don't know the answer, just say that you don't know but be helpful and explain why you can't answer""",
+                If you don't know the answer, just say that you don't know but be helpful and explain why you can't answer.
+                You should always show the data that you used to answer the question.
+                """,
             }
         ]
 
