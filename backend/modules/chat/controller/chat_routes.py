@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 from langchain.embeddings.ollama import OllamaEmbeddings
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, AzureOpenAIEmbeddings
 from logger import get_logger
 from middlewares.auth import AuthBearer, get_current_user
 from models.settings import BrainSettings, get_supabase_client
@@ -45,6 +45,8 @@ def init_vector_store(user_id: UUID) -> CustomSupabaseVectorStore:
         embeddings = OllamaEmbeddings(
             base_url=brain_settings.ollama_api_base_url
         )  # pyright: ignore reportPrivateUsage=none
+    elif brain_settings.openai_api_type == "azure":
+        embeddings = AzureOpenAIEmbeddings(azure_deployment=brain_settings.azure_embedding_deployment)
     else:
         embeddings = OpenAIEmbeddings()
     vector_store = CustomSupabaseVectorStore(

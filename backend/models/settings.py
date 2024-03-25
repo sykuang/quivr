@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from langchain.embeddings.ollama import OllamaEmbeddings
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, AzureOpenAIEmbeddings
 from logger import get_logger
 from models.databases.supabase.supabase import SupabaseDB
 from posthog import Posthog
@@ -106,6 +106,9 @@ class PostHogSettings(BaseSettings):
 class BrainSettings(BaseSettings):
     model_config = SettingsConfigDict(validate_default=False)
     openai_api_key: str = ""
+    openai_api_type: str = ""
+    azure_embedding_deployment: str = ""
+    azure_gpt_deployment: str = ""
     supabase_url: str = ""
     supabase_service_key: str = ""
     resend_api_key: str = "null"
@@ -139,6 +142,8 @@ def get_embeddings():
         embeddings = OllamaEmbeddings(
             base_url=settings.ollama_api_base_url,
         )  # pyright: ignore reportPrivateUsage=none
+    elif settings.openai_api_type == "azure":
+        return AzureOpenAIEmbeddings(azure_deployment=settings.azure_embedding_deployment)
     else:
         embeddings = OpenAIEmbeddings()  # pyright: ignore reportPrivateUsage=none
     return embeddings

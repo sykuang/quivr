@@ -5,6 +5,7 @@ from uuid import UUID
 from fastapi import HTTPException
 from litellm import completion
 from logger import get_logger
+from models.settings import BrainSettings
 from modules.brain.api_brain_qa import APIBrainQA
 from modules.brain.entity.brain_entity import BrainEntity, BrainType
 from modules.brain.knowledge_brain_qa import KnowledgeBrainQA
@@ -63,7 +64,8 @@ class CompositeBrainQA(
         user_id = kwargs.get("user_id")
         if not user_id:
             raise HTTPException(status_code=400, detail="Cannot find user id")
-
+        if BrainSettings().openai_api_type == "azure":
+            model = BrainSettings().azure_gpt_deployment
         super().__init__(
             model=model,
             brain_id=brain_id,
@@ -193,7 +195,7 @@ class CompositeBrainQA(
         messages.append({"role": "user", "content": question.question})
 
         response = completion(
-            model="gpt-3.5-turbo-0125",
+            model=self.model,
             messages=messages,
             tools=tools,
             tool_choice="auto",
@@ -312,7 +314,7 @@ class CompositeBrainQA(
                 )
 
             response_after_tools_answers = completion(
-                model="gpt-3.5-turbo-0125",
+                model=self.model,
                 messages=messages,
                 tools=tools,
                 tool_choice="auto",
@@ -441,7 +443,7 @@ class CompositeBrainQA(
         messages.append({"role": "user", "content": question.question})
 
         initial_response = completion(
-            model="gpt-3.5-turbo-0125",
+            model=self.model,
             stream=True,
             messages=messages,
             tools=tools,
@@ -554,7 +556,7 @@ class CompositeBrainQA(
                 messages.append({"role": "system", "content": PROMPT_2})
 
                 response_after_tools_answers = completion(
-                    model="gpt-3.5-turbo-0125",
+                    model=self.model,
                     messages=messages,
                     tools=tools,
                     tool_choice="auto",

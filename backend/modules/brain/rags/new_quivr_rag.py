@@ -11,7 +11,7 @@ from langchain_core.messages import get_buffer_string
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings, AzureOpenAIEmbeddings
 from llm.utils.get_prompt_to_use import get_prompt_to_use
 from logger import get_logger
 from models import BrainSettings  # Importing settings related to the 'brain'
@@ -87,6 +87,8 @@ class QuivrRAG(BaseModel):
             return OllamaEmbeddings(
                 base_url=self.brain_settings.ollama_api_base_url
             )  # pyright: ignore reportPrivateUsage=none
+        elif self.brain_settings.openai_api_type == "azure":
+            return AzureOpenAIEmbeddings(azure_deployment=self.brain_settings.azure_embedding_deployment)
         else:
             return OpenAIEmbeddings()
 

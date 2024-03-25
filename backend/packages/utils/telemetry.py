@@ -14,7 +14,7 @@ HEADERS = {
 
 def generate_machine_key():
     # Get the OpenAI API key from the environment variables
-    seed = os.getenv("OPENAI_API_KEY")
+    seed = os.getenv("OPENAI_API_KEY") if os.getenv("OPENAI_API_KEY") else os.getenv("AZURE_API_KEY")
 
     # Use SHA-256 hash to generate a unique key from the seed
     unique_key = hashlib.sha256(seed.encode()).hexdigest()

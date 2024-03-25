@@ -178,6 +178,8 @@ class KnowledgeBrainQA(BaseModel, QAInterface):
         # Get Model settings for the user
         self.models_settings = self.user_usage.get_model_settings()
         self.increase_usage_user()
+        if self.brain_settings.openai_api_type == "azure":
+            self.model = self.brain_settings.azure_gpt_deployment
         self.knowledge_qa = QuivrRAG(
             model=self.brain.model if self.brain.model else self.model,
             brain_id=brain_id,
